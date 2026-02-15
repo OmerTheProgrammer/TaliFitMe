@@ -19,6 +19,11 @@ namespace Service
         public Task<int> UpdateAGender(Gender gender);
         public Task<int> DeleteAGender(int id);
 
+        public Task<ManagerList> GetAllManager();
+        public Task<int> InsertAManager(Manager manager);
+        public Task<int> UpdateAManager(Manager manager);
+        public Task<int> DeleteAManager(int id);
+
         public Task<SubscriptionList> GetAllSubscription();
         public Task<int> InsertASubscription(Subscription subscription);
         public Task<int> UpdateASubscription(Subscription subscription);

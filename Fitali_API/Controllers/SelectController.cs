@@ -44,6 +44,44 @@ namespace Fitali_API.Controllers
             int x = db.SaveChanges();
         }
 
+
+        [HttpGet]
+        [ActionName("ManagerSelector")]
+        public ManagerList SelectAllManager()
+        {
+            ManagerDB db = new ManagerDB();
+            ManagerList manager = db.SelectAll();
+            return manager;
+        }
+        [HttpPost]
+        [ActionName("InsertAManager")]
+        public int InsertAManager([FromBody] Manager manager)
+        {
+            ManagerDB db = new ManagerDB();
+            db.Insert(manager);
+            int x = db.SaveChanges();
+            return x;
+        }
+        [HttpDelete("{id}")]
+        [ActionName("DeleteAManager")]
+        public int DeleteAManager(int id)
+        {
+            Manager manager = ManagerDB.SelectById(id);
+            ManagerDB db = new ManagerDB();
+            db.Delete(manager);
+            int x = db.SaveChanges();
+            return x;
+        }
+
+        [HttpPut]
+        [ActionName("UpdateAManager")]
+        public void UpdateAManager([FromBody] Manager manager)
+        {
+            ManagerDB db = new ManagerDB();
+            db.Update(manager);
+            int x = db.SaveChanges();
+        }
+
         [HttpGet]
         [ActionName("PersonSelector")]
 

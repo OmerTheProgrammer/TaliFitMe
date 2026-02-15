@@ -14,7 +14,7 @@ namespace Service
         public HttpClient client;
         public Apiservice()
         {
-          uri = "https://ddxxd6mm-5278.euw.devtunnels.ms/"/*"http://localhost:5278"*/;
+            uri = "http://localhost:5278";
             client = new HttpClient();
             client.BaseAddress = new Uri(uri);
         }
@@ -35,7 +35,22 @@ namespace Service
             return (await client.PutAsJsonAsync<Person>("api/Select/UpdateAPerson", person)).IsSuccessStatusCode ? 1 : 0;
         }
 
-
+        public async Task<ManagerList> GetAllManager()
+        {
+            return await client.GetFromJsonAsync<ManagerList>("/api/Select/ManagerSelector");
+        }
+        public async Task<int> DeleteAManager(int id)
+        {
+            return (await client.DeleteAsync("api/Select/DeleteAManager/" + id)).IsSuccessStatusCode ? 1 : 0;
+        }
+        public async Task<int> InsertAManager(Manager manager)
+        {
+            return (await client.PostAsJsonAsync<Manager>("api/Select/InsertAManager", manager)).IsSuccessStatusCode ? 1 : 0;
+        }
+        public async Task<int> UpdateAManager(Manager manager)
+        {
+            return (await client.PutAsJsonAsync<Manager>("api/Select/UpdateAManager", manager)).IsSuccessStatusCode ? 1 : 0;
+        }
         public async Task<GenderList> GetAllGender()
         {
             return await client.GetFromJsonAsync<GenderList>("/api/Select/GenderSelector");
