@@ -8,9 +8,9 @@ namespace Model
 {
     public class Trainee: Person
     {
-        private bool health_Declaration;
-        private DateTime joining_date;
-        private Subscription id_Sub;
+        private bool health_Declaration = false;
+        private DateTime joining_date = DateTime.Now;
+        private Subscription id_Sub = null;
 
         
         public DateTime Joining_date { get => joining_date; set => joining_date = value; }

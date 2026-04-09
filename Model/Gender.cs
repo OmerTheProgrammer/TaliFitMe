@@ -8,9 +8,9 @@ namespace Model
 {
     public class Gender:BaseEntity
     {
-      private string gender_name;
+      private string gender_name = "Female";
 
         public string Gender_name { get => gender_name; set => gender_name = value; }
     }
-    }
+}
 
