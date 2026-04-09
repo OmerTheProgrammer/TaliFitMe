@@ -10,7 +10,7 @@ namespace Model
     {
         private bool health_Declaration = false;
         private DateTime joining_date = DateTime.Now;
-        private Subscription id_Sub = null;
+        private Subscription id_Sub = new Subscription() { Id = 0 };
 
         
         public DateTime Joining_date { get => joining_date; set => joining_date = value; }
