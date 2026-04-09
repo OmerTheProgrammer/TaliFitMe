@@ -74,9 +74,9 @@ namespace ViewModel
                 string sqlStr = $"INSERT INTO Trainee(id, health_Declaration , joining_date , id_Sub ) VALUES (@id, @health_Declaration, @joining_date , @id_Sub)";
                 command.CommandText = sqlStr;
                 command.Parameters.Add(new OleDbParameter("@id", t.Id));//כי יורש
-                command.Parameters.Add(new OleDbParameter("@health_Declaration", t.Health_Declaration));
+                command.Parameters.Add(new OleDbParameter("@health_Declaration",false));
                 command.Parameters.Add(new OleDbParameter("@joining_date", t.Joining_date));
-                command.Parameters.Add(new OleDbParameter("@id_Sub", t.Id_Sub.Id));
+                command.Parameters.Add(new OleDbParameter("@id_Sub", 0));
                 
             }
         }

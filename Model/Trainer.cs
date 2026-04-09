@@ -9,7 +9,7 @@ namespace Model
     public class Trainer: Person
     {
         private double paymet_per_hour;
-        private string certificate;
+        private string certificate;     
         private bool experience;
         private string description;
 
