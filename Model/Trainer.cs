@@ -8,10 +8,10 @@ namespace Model
 {
     public class Trainer: Person
     {
-        private double paymet_per_hour;
-        private string certificate;     
-        private bool experience;
-        private string description;
+        private double paymet_per_hour=0;
+        private string certificate="";     
+        private bool experience=false;
+        private string description="";
 
         public double Paymet_per_hour { get => paymet_per_hour; set => paymet_per_hour = value; }
         public string Certificate { get => certificate; set => certificate = value; }

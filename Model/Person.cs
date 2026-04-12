@@ -8,16 +8,16 @@ namespace Model
 {
     public class Person:BaseEntity
     {
-        private string first_name;
-        private string last_name;
+        private string first_name="";
+        private string last_name="";
         private DateTime born_date;
-        private string telephone;
-        private string email;
-        private string num_id;
-        private string photo;
-        private string pass;
-        private string user_name;
-        private Gender id_gender;
+        private string telephone="";
+        private string email="";
+        private string num_id="";
+        private string photo="";
+        private string pass="";
+        private string user_name="";
+        private Gender id_gender=null;
 
         public string First_name { get => first_name; set => first_name = value; }
         public string Last_name { get => last_name; set => last_name = value; }

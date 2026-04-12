@@ -2,9 +2,9 @@
 {
     public class List_of_Exc_workouts: BaseEntity
     {
-        private Kinds_of_workouts id_kindOf_workouts;
-        private DateTime workout_date;
-        private Trainer id_trainer;
+        private Kinds_of_workouts id_kindOf_workouts = null;
+        private DateTime workout_date ;
+        private Trainer id_trainer = null;
 
         public Kinds_of_workouts Id_kindOf_workouts { get => id_kindOf_workouts; set => id_kindOf_workouts = value; }
         public DateTime Workout_date { get => workout_date; set => workout_date = value; }

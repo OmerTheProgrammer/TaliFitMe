@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http.Json;
 using Model;
+using System.Net.Http;
 
 namespace Service
 {

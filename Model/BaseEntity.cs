@@ -9,7 +9,7 @@ namespace Model
 {
     public class BaseEntity
     {
-        private int id;
+        private int id = 0;
         public int Id { get => id; set => id = value; }
     }
 }
