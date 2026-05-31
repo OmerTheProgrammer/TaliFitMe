@@ -7,11 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Data.OleDb" Version="9.0.10" />
+    <None Remove="Photos\boy1.jpg" />
+    <None Remove="Photos\boy2.jpg" />
+    <None Remove="Photos\girl1.jpg" />
+    <None Remove="Photos\girl2.jpg" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Model\Model.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Photos\boy1.jpg" />
+    <EmbeddedResource Include="Photos\boy2.jpg" />
+    <Resource Include="Photos\girl1.jpg" />
+    <Resource Include="Photos\girl2.jpg" />
   </ItemGroup>
 
 </Project>

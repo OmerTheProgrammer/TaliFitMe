@@ -11,7 +11,9 @@ namespace ViewModel
     {
         public TraineeList SelectAll()
         {
-            command.CommandText = $"SELECT  Person.id, Person.first_name, Person.last_name, Person.telephone, Person.born_date, Person.photo, Person.user_name, Person.pass, Person.id_gender, Person.email, Person.num_id, Trainee.health_Declaration, "+
+            command.CommandText = $"SELECT  Person.id, Person.first_name, Person.last_name, " +
+                $"Person.telephone, Person.born_date, Person.photo, Person.user_name, Person.pass, " +
+                $"Person.id_gender, Person.email, Person.num_id, Trainee.health_Declaration, "+
                          $" Trainee.joining_date, Trainee.id_Sub "+
                          $" FROM(Person INNER JOIN "+
                          $" Trainee ON Person.id = Trainee.id)";
@@ -42,42 +44,61 @@ namespace ViewModel
             Trainee te = list.Find(item => item.Id == id);
             return te;
         }
+     
         protected override void CreateUpdatedSQL(BaseEntity entity, OleDbCommand cmd)
         {
             Trainee p = entity as Trainee;
             if (p != null)
             {
-                string sqlStr = $"UPDATE Trainee SET Health_Declaration=@health_Declaration, Joining_Date=@joining_Date, Id_Sub=@id_Sub " +
-                    $" WHERE ID=@id";
-                command.CommandText = sqlStr;
-                command.Parameters.Add(new OleDbParameter("@health_Declaration", p.Health_Declaration));
-                command.Parameters.Add(new OleDbParameter("@joining_date", p.Joining_date));
-                command.Parameters.Add(new OleDbParameter("@id_Sub", p.Id_Sub.Id));
-                command.Parameters.Add(new OleDbParameter("@id", p.Id));
+                // שימוש ב-cmd שהתקבל כפרמטר וניקוי שאריות של טבלאות אחרות
+                //cmd.Parameters.Clear();
+
+                string sqlStr = $"UPDATE Trainee SET Health_Declaration=@health_Declaration, " +
+                                $"Joining_Date=@joining_Date, Id_Sub=@id_Sub " +
+                                $"WHERE ID=@id";
+
+                cmd.CommandText = sqlStr;
+
+                // הוספת הפרמטרים ל-cmd לפי הסדר המדויק בשאילתה
+                cmd.Parameters.Add(new OleDbParameter("@health_Declaration", p.Health_Declaration));
+                cmd.Parameters.Add(new OleDbParameter("@joining_date", p.Joining_date));
+                cmd.Parameters.Add(new OleDbParameter("@id_Sub", p.Id_Sub.Id));
+                cmd.Parameters.Add(new OleDbParameter("@id", p.Id));
             }
         }
+
         public override void Update(BaseEntity entity)
         {
             Trainee t = entity as Trainee;
-            if(t != null)
+            if (t != null)
             {
-                updated.Add(new ChangeEntity(this.CreateUpdatedSQL, entity));
+                // הפיכת הסדר: קודם מעדכנים את האבא Person (שם יושבת התמונה) ורק אז את הבן Trainee
                 updated.Add(new ChangeEntity(base.CreateUpdatedSQL, entity));
+                updated.Add(new ChangeEntity(this.CreateUpdatedSQL, entity));
             }
         }
+
 
         protected override void CreateInsertdSQL(BaseEntity entity, OleDbCommand cmd)
         {
             Trainee t = entity as Trainee;
             if (t != null)
             {
-                string sqlStr = $"INSERT INTO Trainee(id, health_Declaration , joining_date , id_Sub ) VALUES (@id, @health_Declaration, @joining_date , @id_Sub)";
+                string sqlStr = $"INSERT INTO Trainee(id, health_Declaration , joining_date , id_Sub ) " +
+                    $"VALUES (@id, @health_Declaration, @joining_date , @id_Sub)";
                 command.CommandText = sqlStr;
                 command.Parameters.Add(new OleDbParameter("@id", t.Id));//כי יורש
                 command.Parameters.Add(new OleDbParameter("@health_Declaration",false));
-                command.Parameters.Add(new OleDbParameter("@joining_date", t.Joining_date));
-                command.Parameters.Add(new OleDbParameter("@id_Sub", 0));
-                
+                command.Parameters.Add(new OleDbParameter("@joining_date", t.Joining_date.Date));
+                if(t.Id_Sub != null)
+                {
+                    command.Parameters.Add(new OleDbParameter("@id_Sub", t.Id_Sub.Id));
+                }
+                else
+                {
+                    command.Parameters.Add(new OleDbParameter("@id_Sub", 1));
+                }
+
             }
         }
         public override void Insert(BaseEntity entity)
@@ -99,7 +120,6 @@ namespace ViewModel
                 command.CommandText = sqlStr;
 
                 command.Parameters.Add(new OleDbParameter("@pid", te.Id));
-
 
             }
         }

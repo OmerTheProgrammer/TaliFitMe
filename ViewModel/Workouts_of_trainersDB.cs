@@ -37,46 +37,40 @@ namespace ViewModel
            Workouts_of_trainers g = list.Find(item => item.Id == id);
             return g;
         }
-
         protected override void CreateDeletedSQL(BaseEntity entity, OleDbCommand cmd)
         {
             Workouts_of_trainers w = entity as Workouts_of_trainers;
             if (w != null)
             {
                 string sqlStr = "DELETE FROM Workouts_of_trainers where id=@pid";
-
                 command.CommandText = sqlStr;
-
                 command.Parameters.Add(new OleDbParameter("@pid", w.Id));
-
             }
         }
-        
-
         protected override void CreateInsertdSQL(BaseEntity entity, OleDbCommand cmd)
         {
             Workouts_of_trainers p = entity as Workouts_of_trainers;
             if (p != null)
             {
-                string sqlStr = $"INSERT INTO  Workouts_of_trainers ( Id_trainer, Id_kind_of_workouts) VALUES (@id_trainer, @id_kind_of_workouts)";
+                string sqlStr = $"INSERT INTO  Workouts_of_trainers ( Id_trainer, Id_kind_of_workouts) VALUES" +
+                    $" (@id_trainer, @id_kind_of_workouts)";
                 command.CommandText = sqlStr;
                 command.Parameters.Add(new OleDbParameter("@id_trainer", p.Id_trainer.Id));
                 command.Parameters.Add(new OleDbParameter("@id_kind_of_workouts", p.Id_kind_of_workouts.Id));
-
             }
         }
-
         protected override void CreateUpdatedSQL(BaseEntity entity, OleDbCommand cmd)
         {
 
             Workouts_of_trainers wt = entity as Workouts_of_trainers;
             if (wt != null)
             {
-                string sqlStr = $"UPDATE Workouts_of_trainers SET Id_trainer=@id_trainer , Id_kind_of_workouts=@id_kind_of_workouts" +
+                string sqlStr = $"UPDATE Workouts_of_trainers SET Id_trainer=@id_trainer , " +
+                    $"Id_kind_of_workouts=@id_kind_of_workouts" +
                     $" WHERE ID=@id";
                 command.CommandText = sqlStr;
                 command.Parameters.Add(new OleDbParameter("@id_trainer", wt.Id_trainer.Id));
-                command.Parameters.Add(new OleDbParameter("@id_kind_of_trainers", wt.Id_kind_of_workouts.Id));
+                command.Parameters.Add(new OleDbParameter("@id_kind_of_workouts", wt.Id_kind_of_workouts.Id));
                 command.Parameters.Add(new OleDbParameter("@id", wt.Id));
             }
         }

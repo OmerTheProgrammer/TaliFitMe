@@ -54,14 +54,13 @@ namespace ViewModel
 
             }
         }
-        
-
         protected override void CreateInsertdSQL(BaseEntity entity, OleDbCommand cmd)
         {
             Training_registration tr = entity as Training_registration;
             if (tr != null)
             {
-                string sqlStr = $"INSERT INTO Training_registration ( Id_trainee, Id_excWorkouts) VALUES (@id_trainee, @id_excWorkouts)";
+                string sqlStr = $"INSERT INTO Training_registration ( Id_trainee, Id_excWorkouts)" +
+                    $" VALUES (@id_trainee, @id_excWorkouts)";
                 command.CommandText = sqlStr;
                 command.Parameters.Add(new OleDbParameter("@id_trainee", tr.Id_trainee.Id));
                 command.Parameters.Add(new OleDbParameter("@id_excWorkouts", tr.Id_excWorkouts.Id));

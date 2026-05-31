@@ -10,6 +10,8 @@ namespace Service
 {
     public interface IApiService
     {
+        
+       public Task<string> GetPersonPhotoByte64(int id);
         public Task<PersonList> GetAllPerson();
         public Task<int>InsertAPerson(Person person);
         public Task<int> UpdateAPerson(Person person);
@@ -34,13 +36,10 @@ namespace Service
         public Task<int> UpdateAKinds_of_workouts(Kinds_of_workouts kinds_of_workouts);
         public Task<int> DeleteAKinds_of_workouts(int id);
 
-
         public Task<List_of_Exc_workoutsList> GetAllList_of_Exc_workouts();
         public Task<int> InsertAList_of_Exc_workouts(List_of_Exc_workouts list_of_Exc_workouts);
         public Task<int> UpdateAList_of_Exc_workouts(List_of_Exc_workouts list_of_Exc_workouts);
         public Task<int> DeleteAList_of_Exc_workouts(int id);
-
-
 
         public Task<TrainerList> GetAllTrainer();
         public Task<int> InsertATrainer(Trainer trainer);

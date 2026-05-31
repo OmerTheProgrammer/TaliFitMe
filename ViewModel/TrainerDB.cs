@@ -12,7 +12,8 @@ namespace ViewModel
     {
         public TrainerList SelectAll()
         {
-            command.CommandText = $"SELECT Person.*, Trainer.paymet_per_hour, Trainer.certificate, Trainer.experience, Trainer.description FROM  (Person INNER JOIN  Trainer ON Person.id = Trainer.id)";
+            command.CommandText = $"SELECT Person.*, Trainer.paymet_per_hour, Trainer.certificate," +
+                $" Trainer.experience, Trainer.description FROM  (Person INNER JOIN  Trainer ON Person.id = Trainer.id)";
             TrainerList groupList = new TrainerList(base.Select());
             return groupList;
         }
@@ -21,7 +22,7 @@ namespace ViewModel
             Trainer t = entity as Trainer;
             t.Paymet_per_hour= double.Parse(reader["paymet_per_hour"].ToString());
             t.Certificate = reader["certificate"].ToString();
-            t.Experience = true;// bool.Parse(reader["experience"].ToString());
+            t.Experience = true;
             t.Description = reader["description"].ToString();
             base.CreateModel(entity);
             return t;
@@ -44,7 +45,8 @@ namespace ViewModel
             Trainer p = entity as Trainer;
             if (p != null)
             {
-                string sqlStr = $"UPDATE Trainer SET Paymet_per_hour=@paymet_per_hour,Certificate=@certificate,Experience=@experience,Description=@description " +
+                string sqlStr = $"UPDATE Trainer SET Paymet_per_hour=@paymet_per_hour," +
+                    $"Certificate=@certificate,Experience=@experience,Description=@description " +
                     $" WHERE ID=@id";
                 command.CommandText = sqlStr;
                 command.Parameters.Add(new OleDbParameter("@paymet_per_hour", p.Paymet_per_hour));
@@ -54,6 +56,7 @@ namespace ViewModel
                 command.Parameters.Add(new OleDbParameter("@id", p.Id));
             }
         }
+      
         public override void Update(BaseEntity entity)
         {
             Trainer t = entity as Trainer;
@@ -63,20 +66,19 @@ namespace ViewModel
                 updated.Add(new ChangeEntity(base.CreateUpdatedSQL, entity));
             }
         }
-
         protected override void CreateInsertdSQL(BaseEntity entity, OleDbCommand cmd)
         {
             Trainer t = entity as Trainer;
             if (t != null)
             {
-                string sqlStr = $"INSERT INTO Trainer( Id, Paymet_per_hour ,Certificate, Experience , Description ) VALUES (@paymet_per_hour, @certificate , @Experience ,@description, @id)";
+                string sqlStr = $"INSERT INTO Trainer( Id, Paymet_per_hour ,Certificate, Experience , Description ) " +
+                    $"VALUES (@id, @paymet_per_hour, @certificate , @Experience ,@description)";
                 command.CommandText = sqlStr;
                 command.Parameters.Add(new OleDbParameter("@id", t.Id));
                 command.Parameters.Add(new OleDbParameter("@paymet_per_hour", t.Paymet_per_hour));
                 command.Parameters.Add(new OleDbParameter("@certificate", t.Certificate));
                 command.Parameters.Add(new OleDbParameter("@experience", t.Experience));
                 command.Parameters.Add(new OleDbParameter("@ description", t.Description));
-
             }
         }
         public override void Insert(BaseEntity entity)
@@ -88,7 +90,6 @@ namespace ViewModel
                 inserted.Add(new ChangeEntity(this.CreateInsertdSQL, entity));
             }
         }
-
         protected override void CreateDeletedSQL(BaseEntity entity, OleDbCommand cmd)
         {
             Trainer te = entity as Trainer;
@@ -103,7 +104,6 @@ namespace ViewModel
 
             }
         }
-
         public virtual void Delete(BaseEntity entity)
         {
             BaseEntity reqEntity = this.NewEntity();

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Net.Http.Json;
 using Model;
 using System.Net.Http;
+using System.Text.Json;
 
 namespace Service
 {
@@ -19,6 +20,34 @@ namespace Service
             client = new HttpClient();
             client.BaseAddress = new Uri(uri);
         }
+       
+
+        public async Task<string> GetPersonPhotoByte64(int id)
+        {
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync($"/api/Select/PersonPhotoSelector64Byte/{id}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    // קריאת התשובה כטקסט פשוט וישיר מהשרת
+                    string content = await response.Content.ReadAsStringAsync();
+
+                    if (!string.IsNullOrEmpty(content))
+                    {
+                        // ניקוי מרכאות מיותרות אם השרת עטף את הטקסט
+                        return content.Trim('"');
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[API Error]: {ex.Message}");
+            }
+            return null;
+        }
+
+
         public async Task<PersonList>GetAllPerson()
         {
             return await client.GetFromJsonAsync<PersonList>("/api/Select/PersonSelector");
@@ -35,6 +64,7 @@ namespace Service
         {
             return (await client.PutAsJsonAsync<Person>("api/Select/UpdateAPerson", person)).IsSuccessStatusCode ? 1 : 0;
         }
+
 
         public async Task<ManagerList> GetAllManager()
         {
@@ -125,8 +155,6 @@ namespace Service
         }
 
 
-
-
         public async Task<Kinds_of_workoutsList> GetAllKinds_of_workouts()
         {
             return await client.GetFromJsonAsync<Kinds_of_workoutsList>("/api/Select/Kinds_of_workoutsSelector");
@@ -162,8 +190,6 @@ namespace Service
         {
             return (await client.PutAsJsonAsync<List_of_Exc_workouts>("api/Select/UpdateAList_of_Exc_workouts", list_of_Exc_workouts)).IsSuccessStatusCode ? 1 : 0;
         }
-
-
 
 
 

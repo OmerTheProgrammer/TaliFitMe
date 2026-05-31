@@ -12,7 +12,9 @@ namespace ViewModel
     {
         public ManagerList SelectAll()
         {
-            command.CommandText = $"SELECT Person.first_name, Person.last_name, Person.telephone, Person.num_id, Person.born_date, Person.email, Person.id_gender, Person.pass, Person.user_name, Person.photo, Manager.id\r\nFROM            (Manager INNER JOIN\r\n                         Person ON Manager.id = Person.id)";
+            command.CommandText = $"SELECT Person.first_name, Person.last_name, Person.telephone, " +
+                $"Person.num_id, Person.born_date, Person.email, Person.id_gender, Person.pass, Person.user_name," +
+                $" Person.photo, Manager.id\r\nFROM (Manager INNER JOIN\r\n Person ON Manager.id = Person.id)";
             ManagerList groupList = new ManagerList(base.Select());
             return groupList;
         }
@@ -42,21 +44,22 @@ namespace ViewModel
             Manager p = entity as Manager;
             if (p != null)
             {
-                string sqlStr = $"INSERT INTO Manager( ) VALUES ()";
-                command.CommandText = sqlStr;
+                string sqlStr = "INSERT INTO Manager (id) VALUES (@id)";
 
+                cmd.CommandText = sqlStr;
+                cmd.Parameters.Clear();
+                cmd.Parameters.AddWithValue("@id", p.Id);
             }
         }
-             public override void Insert(BaseEntity entity)
-        {
-            Trainer tr = entity as Trainer;
-            if (tr != null)
+        public override void Insert(BaseEntity entity)
             {
-                inserted.Add(new ChangeEntity(base.CreateInsertdSQL, entity));
-                inserted.Add(new ChangeEntity(this.CreateInsertdSQL, entity));
+                Manager tr = entity as Manager;
+                if (tr != null)
+                {
+                    inserted.Add(new ChangeEntity(base.CreateInsertdSQL, entity));
+                    inserted.Add(new ChangeEntity(this.CreateInsertdSQL, entity));
+                }
             }
-        }
-        
         protected override void CreateDeletedSQL(BaseEntity entity, OleDbCommand cmd)
         {
             Manager p = entity as Manager;
@@ -65,9 +68,7 @@ namespace ViewModel
                 string sqlStr = "DELETE FROM Manager where id=@pid";
 
                 command.CommandText = sqlStr;
-
                 command.Parameters.Add(new OleDbParameter("@pid", p.Id));
-
             }
         }
         public virtual void Delete(BaseEntity entity)

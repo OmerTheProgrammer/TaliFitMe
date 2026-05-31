@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="ViewModel.BaseDB">
+    <Position X="12.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAQAAEAAAIACAAoICAABAAAAAhUAIAAAAAAAQEASAAA=</HashCode>
+      <FileName>BaseDB.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ViewModel.ChangeEntity">
+    <Position X="19.75" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAABAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAABAAAA=</HashCode>
+      <FileName>ChangeEntity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ViewModel.GenderDB">
+    <Position X="10.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAKACAAAAAAAAAAAAAgAAIAAAAAAAAAACAAA=</HashCode>
+      <FileName>GenderDB.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ViewModel.Kinds_of_workoutsDB">
+    <Position X="6" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAKACAAAAAAAAAAAAAgAAIAAAAAAAAAACAAA=</HashCode>
+      <FileName>kinds_of_workoutsDB.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ViewModel.List_of_Exc_workoutsDB">
+    <Position X="8" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAKACAAAAAAAAAAAAAgAAIAAAAAAAAAACAAA=</HashCode>
+      <FileName>List_of_Exc_workoutsDB.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ViewModel.ManagerDB">
+    <Position X="14" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAkAAACACAAAAAAAAAAAAAgEAIAAAAAAAAAACAAA=</HashCode>
+      <FileName>ManagerDB.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ViewModel.PersonDB">
+    <Position X="15.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAKACAAAAAAAAAAAAAgAAIAAAAAAAAAACAAA=</HashCode>
+      <FileName>PersonDB.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ViewModel.SubscriptionDB">
+    <Position X="5.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAKACAAAAAAAAAAAAAgAAIAAAAAAAAAACAAA=</HashCode>
+      <FileName>SubscriptionDB.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ViewModel.TraineeDB">
+    <Position X="13.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAkAAAKACAAAAAAAAAAAAAgEAIAAAAAAAAAACAAA=</HashCode>
+      <FileName>TraineeDB.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ViewModel.TrainerDB">
+    <Position X="16" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAkAAAKACAAAAAAAAAAAAAgEAIAAAAAAAAAACAAA=</HashCode>
+      <FileName>TrainerDB.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ViewModel.Training_registrationDB">
+    <Position X="17.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAKACAAAAAAAAAAAAAgAAIAAAAAAAAAACAAA=</HashCode>
+      <FileName>Training_registrationDB.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ViewModel.Workouts_of_trainersDB">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAKACAAAAAAAAAAAAAgAAIAAAAAAAAAACAAA=</HashCode>
+      <FileName>Workouts_of_trainersDB.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="System.Object">
+    <Position X="9.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Delegate Name="ViewModel.CreateSql">
+    <Position X="18.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAAAAAAAQAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ChangeEntity.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -43,24 +43,19 @@ namespace ViewModel
 
         protected override void CreateDeletedSQL(BaseEntity entity, OleDbCommand cmd)
         {
-
             List_of_Exc_workouts l = entity as List_of_Exc_workouts;
             if (l != null)
             {
                 string sqlStr = "DELETE FROM List_of_Exc_workouts where id=@pid";
-
                 command.CommandText = sqlStr;
                 command.Parameters.Add(new OleDbParameter("@pid", l.Id));
-
             }
         }
-
         protected override void CreateInsertdSQL(BaseEntity entity, OleDbCommand cmd)
         {
             List_of_Exc_workouts lw = entity as List_of_Exc_workouts;
             if (lw != null)
             {
-             //   string sqlStr = $"INSERT INTO List_of_Exc_workouts ( Id_kindOf_workouts, Workout_date, Workout_time, Id_trainer) VALUES (@id_kindOf_workouts, @workout_date, @workout_time, @id_trainer)";
                 string sqlStr = $"INSERT INTO List_of_Exc_workouts ( Id_kindOf_workouts, Workout_date , Id_trainer) VALUES " +
                     $"(@id_kindOf_workouts , @workout_date , @id_trainer)";
                 command.CommandText = sqlStr;
@@ -69,10 +64,8 @@ namespace ViewModel
                 oleDbParameter.Value = lw.Workout_date;
                 command.Parameters.Add(oleDbParameter);
                 command.Parameters.Add(new OleDbParameter("@id_trainer", lw.Id_trainer.Id));
-
             }
         }
-
         protected override void CreateUpdatedSQL(BaseEntity entity, OleDbCommand cmd)
         {
             List_of_Exc_workouts l = entity as List_of_Exc_workouts;
@@ -90,7 +83,6 @@ namespace ViewModel
                 var x = l;
                 command.Parameters.Add(new OleDbParameter("@id_trainer", l.Id_trainer.Id));
                 command.Parameters.Add(new OleDbParameter("@id", l.Id));
-              
             }
         }
     }

@@ -10,14 +10,8 @@ using System.Threading.Tasks;
     {
         public abstract class BaseDB
         {
-        //protected static string connectionString = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source= \"C:\\Users\\mirit\\source\\repos\\titistunis2-stack\\TaliFitMe\\ViewModel\\talistu2506.accdb\"";
-        protected static string connectionString = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source= \"C:\\Users\\mirit\\source\\repos\\titistunis2-stack\\TaliFitMe\\ViewModel\\talistu2506.accdb\"";
-            //     C:\Users\User\source\repos\titistunis2-stack\TaliFitMe\ViewModel
-
-            //protected static string connectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source="
-            //              + System.IO.Path.GetFullPath(System.Reflection.Assembly.GetExecutingAssembly().Location
-            //              + "/../../../../../VViewModel/ExampleProjectBagrutGrades.accdb");
-
+        protected static string connectionString = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source= " +
+            $"\"C:\\Users\\mirit\\source\\repos\\titistunis2-stack\\TaliFitMe\\ViewModel\\talistu2506.accdb\"";
         
             protected static OleDbConnection connection;
             protected OleDbCommand command;
@@ -42,7 +36,6 @@ using System.Threading.Tasks;
                 string str = String.Join('\\', st);
                 return str;
             }
-            //C:\Users\nativ\Downloads\Exampl_Project\MyWhatApp\VViewModel\ExampleProjectBagrutGrades.accdb
             public BaseDB()
             {
                 var x = Path();
@@ -50,11 +43,7 @@ using System.Threading.Tasks;
                 command = new OleDbCommand();
                 command.Connection = connection;
             }
-
             public abstract BaseEntity NewEntity();
-
-
-
             protected List<BaseEntity> Select()
             {
                 List<BaseEntity> list = new List<BaseEntity>();
@@ -83,11 +72,10 @@ using System.Threading.Tasks;
                 finally
                 {
                     if (reader != null) reader.Close();
-                    //   if (connection.State == ConnectionState.Open) connection.Close();
+                   
                 }
                 return list;
             }
-
             protected async Task<List<BaseEntity>> SelectAsync(string sqlStr)
             {
                 OleDbConnection connection = new OleDbConnection();
@@ -119,18 +107,13 @@ using System.Threading.Tasks;
                 }
                 return list;
             }
-
-
             protected virtual BaseEntity CreateModel(BaseEntity entity)
             {
                 entity.Id = (int)reader["id"];
                 return entity;
             }
-
         protected abstract void CreateDeletedSQL(BaseEntity entity, OleDbCommand cmd);
         public static List<ChangeEntity> deleted = new List<ChangeEntity>();
-
-
         public virtual void Delete(BaseEntity entity)
         {
             BaseEntity reqEntity = this.NewEntity();
@@ -139,11 +122,8 @@ using System.Threading.Tasks;
                 deleted.Add(new ChangeEntity(this.CreateDeletedSQL, entity));
             }
         }
-
         protected abstract void CreateInsertdSQL(BaseEntity entity, OleDbCommand cmd);
         public static List<ChangeEntity> inserted = new List<ChangeEntity>();
-
-
         public virtual void Insert(BaseEntity entity)
         {
             BaseEntity reqEntity = this.NewEntity();
@@ -152,11 +132,8 @@ using System.Threading.Tasks;
                 inserted.Add(new ChangeEntity(this.CreateInsertdSQL, entity));
             }
         }
-
         protected abstract void CreateUpdatedSQL(BaseEntity entity, OleDbCommand cmd);
         public static List<ChangeEntity> updated = new List<ChangeEntity>();
-
-
         public virtual void Update(BaseEntity entity)
         {
             BaseEntity reqEntity = this.NewEntity();
@@ -165,12 +142,6 @@ using System.Threading.Tasks;
                 updated.Add(new ChangeEntity(this.CreateUpdatedSQL, entity));
             }
         }
-
-
-
-
-
-
         public int SaveChanges()
         {
             OleDbTransaction trans = null;
@@ -184,27 +155,23 @@ using System.Threading.Tasks;
                 {
                     connection.Open();
                 }
-
                 trans = connection.BeginTransaction();
                 command.Transaction = trans;
-
                 foreach (var entity in inserted)
                 {
                     command.Parameters.Clear();
-                    entity.CreateSql(entity.Entity, command); //cmd.CommandText = CreateInsertSQL(entity.Entity);
+                    entity.CreateSql(entity.Entity, command); 
                     records_affected += command.ExecuteNonQuery();
 
                     command.CommandText = "Select @@Identity";
                     entity.Entity.Id = (int)command.ExecuteScalar();
                 }
-
                 foreach (var entity in updated)
                 {
                     command.Parameters.Clear();
-                    entity.CreateSql(entity.Entity, command);        //cmd.CommandText = CreateUpdateSQL(entity.Entity);
+                    entity.CreateSql(entity.Entity, command);      
                     records_affected += command.ExecuteNonQuery();
                 }
-
                 foreach (var entity in deleted)
                 {
                     command.Parameters.Clear();
@@ -212,7 +179,6 @@ using System.Threading.Tasks;
 
                     records_affected += command.ExecuteNonQuery();
                 }
-
                 trans.Commit();
             }
             catch (Exception ex)
@@ -228,13 +194,9 @@ using System.Threading.Tasks;
 
                 deleted.Clear();
 
-                //if (connection.State == System.Data.ConnectionState.Open)
-                //    connection.Close();
             }
-
             return records_affected;
         }
-
     }
-    }
+}
 

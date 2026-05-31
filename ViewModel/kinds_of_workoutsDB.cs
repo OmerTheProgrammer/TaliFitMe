@@ -53,20 +53,18 @@ namespace ViewModel
 
             }
         }
-
-
         protected override void CreateInsertdSQL(BaseEntity entity, OleDbCommand cmd)
         {
             Kinds_of_workouts k = entity as Kinds_of_workouts;
             if (k != null)
             {
-                string sqlStr = $"INSERT INTO Kinds_of_workouts( Name_of_workout , Max_amount_of_people) VALUES (@name_of_workout, @max_amount_of_people)";
+                string sqlStr = $"INSERT INTO Kinds_of_workouts( Name_of_workout , Max_amount_of_people)" +
+                    $" VALUES (@name_of_workout, @max_amount_of_people)";
                 command.CommandText = sqlStr;
                 command.Parameters.Add(new OleDbParameter("@name_of_workout", k.Name_of_workout));
                 command.Parameters.Add(new OleDbParameter("@max_amount_of_people", k.Max_amount_of_people));
             }
         }
-
         protected override void CreateUpdatedSQL(BaseEntity entity, OleDbCommand cmd)
         {
             
@@ -83,6 +81,4 @@ namespace ViewModel
             }
         }
     }
-
-        
-    }
+ }

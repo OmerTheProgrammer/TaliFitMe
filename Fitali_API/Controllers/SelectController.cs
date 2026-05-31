@@ -119,6 +119,18 @@ namespace Fitali_API.Controllers
             int x = db.SaveChanges();
         }
 
+
+        [HttpGet("{id}")]
+        [ActionName("PersonPhotoSelector64Byte")]
+        public string GetPersonPhotoSelector64Byte(int id)
+        {
+            PersonDB db = new PersonDB();
+            string photo = db.SelectPersonPhotoById(id);
+            return photo;
+        }
+
+
+
         [HttpGet]
         [ActionName("SubscriptionSelector")]
         public SubscriptionList SelectAllSubscription()
@@ -227,6 +239,24 @@ namespace Fitali_API.Controllers
             db.Update(trainee);
             int x = db.SaveChanges();
         }
+        //[HttpPut]
+        //    [ActionName("UpdateATrainee")]
+        //    public int UpdateATrainee([FromBody] Trainee trainee)
+        //    {
+        //        try
+        //        {
+        //            TraineeDB db = new TraineeDB();
+        //            db.Update(trainee);
+        //            int x = db.SaveChanges();
+
+        //            return x; // מחזיר 1 אם שורה אחת עודכנה בהצלחה, או 0 אם נכשל
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            System.Diagnostics.Debug.WriteLine($"[Server Error]: {ex.Message}");
+        //            return 0; // במקרה של קריסה מחזירים 0
+        //        }
+        //    }
         [HttpGet]
         [ActionName("Training_registrationSelector")]
         public Training_registrationList SelectAllTraining_registration()
@@ -375,11 +405,6 @@ namespace Fitali_API.Controllers
             List_of_Exc_workoutsDB db = new List_of_Exc_workoutsDB();
             db.Update(list_of_Exc_workouts);
             int x = db.SaveChanges();
-        }
-
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}
+        } 
     }
 }
