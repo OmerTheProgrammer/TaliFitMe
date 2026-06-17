@@ -10,7 +10,7 @@ using System.Text.Json;
 
 namespace Service
 {
-    public class Apiservice: IApiService
+    public class Apiservice : IApiService
     {
         string uri;
         public HttpClient client;
@@ -157,7 +157,8 @@ namespace Service
         }
         public async Task<int> UpdateATrainee(Trainee trainee)
         {
-            return (await client.PutAsJsonAsync<Trainee>("api/Select/UpdateATrainee", trainee, JsonOptions)).IsSuccessStatusCode ? 1 : 0;
+            var response = (await client.PutAsJsonAsync<Trainee>("api/Select/UpdateATrainee", trainee, JsonOptions));
+            return response.IsSuccessStatusCode ? 1 : 0;
         }
 
 

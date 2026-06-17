@@ -6,122 +6,137 @@ using System.Data.OleDb;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-    namespace ViewModel
+using static System.Runtime.InteropServices.JavaScript.JSType;
+
+namespace ViewModel
+{
+    public abstract class BaseDB
     {
-        public abstract class BaseDB
+
+        //$"Provider=Microsoft.ACE.OLEDB.12.0;Data Source= " +
+        //    $"\"C:\\Users\\mirit\\source\\repos\\titistunis2-stack\\TaliFitMe\\ViewModel\\talistu2506.accdb\"";
+        protected static string connectionString = GetConnectionString();
+
+
+        protected static OleDbConnection connection;
+        protected static OleDbTransaction trans;
+        protected OleDbCommand command;
+        protected OleDbDataReader reader;
+        public static string GetPath()
         {
-        protected static string connectionString = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source= " +
-            $"\"C:\\Users\\mirit\\source\\repos\\titistunis2-stack\\TaliFitMe\\ViewModel\\talistu2506.accdb\"";
-        
-            protected static OleDbConnection connection;
-            protected static OleDbTransaction trans;
-            protected OleDbCommand command;
-            protected OleDbDataReader reader;
-            public static string Path()
+            // 1. Get the directory of the executing assembly (e.g., bin/Debug/net8.0/)
+            string assemblyPath = Path.GetDirectoryName(
+                System.Reflection.Assembly.GetExecutingAssembly().Location);
+
+            // 2. Navigate UP to the project root (assuming standard structure)
+            // This might need adjustment based on your specific solution structure (e.g., 3 levels up: \bin\Debug\net8.0\)
+            // Let's assume the DB file is in a known location relative to the solution file.
+            // A more robust approach: Find the project path.
+
+            // This navigates up three levels from the running DLL:
+            // ViewModel.dll <- bin <- Debug <- net8.0 (1) <- ProjectName (2) <- SolutionFolder (3)
+            string projectRoot = Path.GetFullPath(
+                Path.Combine(assemblyPath, @"..\..\..\.."));
+
+            // Assuming your .mdf file is located in the root of your ViewModel project folder:
+            string ProjectPath = Path.Combine(projectRoot, "ViewModel");
+            return ProjectPath;
+        }
+
+        private static string GetConnectionString()
+        {
+            // Assuming your .mdf file is located in the root of your ViewModel project folder:
+            string dbFilePath = Path.Combine(GetPath(), "talistu2506.accdb");
+
+            // 3. Construct the connection string using the correct, fully qualified path
+            return "Provider=Microsoft.ACE.OLEDB.12.0;" +
+                   "Data Source=\"" + dbFilePath + "\";";
+        }
+
+        public BaseDB()
+        {
+            connection ??= new OleDbConnection(connectionString);
+            command = new OleDbCommand();
+            command.Connection = connection;
+        }
+        public abstract BaseEntity NewEntity();
+        protected List<BaseEntity> Select()
+        {
+            List<BaseEntity> list = new List<BaseEntity>();
+            try
             {
-                String[] args = Environment.GetCommandLineArgs();
-                string s;
-                if (args.Length == 1)
+                command.Connection = connection;
+                if (trans != null)
                 {
-                    s = args[0];
+                    command.Transaction = trans;
                 }
                 else
                 {
-                    s = args[1];
-                    s = s.Replace("/service:", "");
+                    command.Transaction = null; // Clear old transaction references
                 }
-                string[] st = s.Split('\\');
-                int x = st.Length - 5;
-                st[x] = "ViewModel";
-                Array.Resize(ref st, x + 1);
-                string str = String.Join('\\', st);
-                return str;
-            }
-            public BaseDB()
-            {
-                var x = Path();
-                connection ??= new OleDbConnection(connectionString);
-                command = new OleDbCommand();
-                command.Connection = connection;
-            }
-            public abstract BaseEntity NewEntity();
-            protected List<BaseEntity> Select()
-            {
-                List<BaseEntity> list = new List<BaseEntity>();
-                try
+
+                if (connection.State != ConnectionState.Open)
                 {
-                    command.Connection = connection;
-                    if (trans != null)
-                    {
-                        command.Transaction = trans;
-                    }
-                    else
-                    {
-                        command.Transaction = null; // Clear old transaction references
-                    }
-
-                    if (connection.State != ConnectionState.Open)
-                    {
-                        connection.Open();
-                    }
-
-                    reader = command.ExecuteReader();
-
-                    while (reader.Read())
-                    {
-                        BaseEntity entity = NewEntity();
-                        list.Add(CreateModel(entity));
-                    }
-                }
-                catch (Exception e)
-                {
-
-                    throw new Exception(
-                        e.Message + "\nSQL:" + command.CommandText);
-                }
-                finally
-                {
-                    if (reader != null) reader.Close();
-                   
-                }
-                return list;
-            }
-            protected async Task<List<BaseEntity>> SelectAsync(string sqlStr)
-            {
-                OleDbConnection connection = new OleDbConnection();
-                OleDbCommand command = new OleDbCommand();
-                List<BaseEntity> list = new List<BaseEntity>();
-
-                try
-                {
-                    command.Connection = connection;
-                    command.CommandText = sqlStr;
                     connection.Open();
-                    this.reader = (OleDbDataReader)await command.ExecuteReaderAsync();
+                }
 
+                reader = command.ExecuteReader();
 
-                    while (reader.Read())
-                    {
-                        BaseEntity entity = NewEntity();
-                        list.Add(CreateModel(entity));
-                    }
-                }
-                catch (Exception e)
+                while (reader.Read())
                 {
-                    System.Diagnostics.Debug.WriteLine(e.Message + "\nSQL:" + command.CommandText);
+                    BaseEntity entity = NewEntity();
+                    list.Add(CreateModel(entity));
                 }
-                finally
-                {
-                    if (reader != null) reader.Close();
-                    if (connection.State == ConnectionState.Open) connection.Close();
-                }
-                return list;
             }
-            protected virtual BaseEntity CreateModel(BaseEntity entity)
+            catch (Exception e)
             {
-                entity.Id = (int)reader["id"];
-                return entity;
+
+                throw new Exception(
+                    e.Message + "\nSQL:" + command.CommandText);
             }
+            finally
+            {
+                if (reader != null) reader.Close();
+
+            }
+            return list;
+        }
+        protected async Task<List<BaseEntity>> SelectAsync(string sqlStr)
+        {
+            OleDbConnection connection = new OleDbConnection();
+            OleDbCommand command = new OleDbCommand();
+            List<BaseEntity> list = new List<BaseEntity>();
+
+            try
+            {
+                command.Connection = connection;
+                command.CommandText = sqlStr;
+                connection.Open();
+                this.reader = (OleDbDataReader)await command.ExecuteReaderAsync();
+
+
+                while (reader.Read())
+                {
+                    BaseEntity entity = NewEntity();
+                    list.Add(CreateModel(entity));
+                }
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(e.Message + "\nSQL:" + command.CommandText);
+            }
+            finally
+            {
+                if (reader != null) reader.Close();
+                if (connection.State == ConnectionState.Open) connection.Close();
+            }
+            return list;
+        }
+        protected virtual BaseEntity CreateModel(BaseEntity entity)
+        {
+            entity.Id = (int)reader["id"];
+            return entity;
+        }
         protected abstract void CreateDeletedSQL(BaseEntity entity, OleDbCommand cmd);
         public static List<ChangeEntity> deleted = new List<ChangeEntity>();
         public virtual void Delete(BaseEntity entity)
@@ -170,7 +185,7 @@ using System.Threading.Tasks;
                 foreach (var entity in inserted)
                 {
                     command.Parameters.Clear();
-                    entity.CreateSql(entity.Entity, command); 
+                    entity.CreateSql(entity.Entity, command);
                     records_affected += command.ExecuteNonQuery();
 
                     command.CommandText = "Select @@Identity";
@@ -179,7 +194,7 @@ using System.Threading.Tasks;
                 foreach (var entity in updated)
                 {
                     command.Parameters.Clear();
-                    entity.CreateSql(entity.Entity, command);      
+                    entity.CreateSql(entity.Entity, command);
                     records_affected += command.ExecuteNonQuery();
                 }
                 foreach (var entity in deleted)
