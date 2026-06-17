@@ -11,9 +11,7 @@ namespace ViewModel
     {
         public TraineeList SelectAll()
         {
-            command.CommandText = $"SELECT  Person.id, Person.first_name, Person.last_name, " +
-                $"Person.telephone, Person.born_date, Person.photo, Person.user_name, Person.pass, " +
-                $"Person.id_gender, Person.email, Person.num_id, Trainee.health_Declaration, "+
+            command.CommandText = $"SELECT  Person.* , Trainee.health_Declaration, "+
                          $" Trainee.joining_date, Trainee.id_Sub "+
                          $" FROM(Person INNER JOIN "+
                          $" Trainee ON Person.id = Trainee.id)";
@@ -44,25 +42,52 @@ namespace ViewModel
             Trainee te = list.Find(item => item.Id == id);
             return te;
         }
-     
+
         protected override void CreateUpdatedSQL(BaseEntity entity, OleDbCommand cmd)
         {
             Trainee p = entity as Trainee;
             if (p != null)
             {
-                // שימוש ב-cmd שהתקבל כפרמטר וניקוי שאריות של טבלאות אחרות
-                //cmd.Parameters.Clear();
+                // 1. ניקוי פרמטרים קודמים כדי שסדר הפרמטרים של ה-Trainee יהיה ראשון ונקי
+                cmd.Parameters.Clear();
 
-                string sqlStr = $"UPDATE Trainee SET Health_Declaration=@health_Declaration, " +
-                                $"Joining_Date=@joining_Date, Id_Sub=@id_Sub " +
-                                $"WHERE ID=@id";
+                // 2. שאילתת ה-UPDATE
+                string sqlStr = "UPDATE Trainee SET " +
+                                "Health_Declaration = @health_Declaration, " +
+                                "Joining_Date = @joining_Date, " +
+                                "Id_Sub = @id_Sub " +
+                                "WHERE ID = @id";
 
                 cmd.CommandText = sqlStr;
 
-                // הוספת הפרמטרים ל-cmd לפי הסדר המדויק בשאילתה
-                cmd.Parameters.Add(new OleDbParameter("@health_Declaration", p.Health_Declaration));
-                cmd.Parameters.Add(new OleDbParameter("@joining_date", p.Joining_date));
-                cmd.Parameters.Add(new OleDbParameter("@id_Sub", p.Id_Sub.Id));
+                // טיפול בהצהרת בריאות
+                object healthToSave = p.Health_Declaration;
+                if (healthToSave == null)
+                {
+                    healthToSave = "";
+                }
+
+                // טיפול בתאריך הצטרפות
+                DateTime dateToSave = p.Joining_date;
+                if (dateToSave == DateTime.MinValue)
+                {
+                    dateToSave = DateTime.Today;
+                }
+
+                // טיפול במנוי - כאן הוספנו בדיקה: אם המנוי הוא 0 או null, נשמור null ב-Access
+                // (בתנאי שבממסד הנתונים השדה id_Sub מאפשר ערכים ריקים)
+                object subIdToSave = DBNull.Value;
+                if (p.Id_Sub != null && p.Id_Sub.Id != 0)
+                {
+                    subIdToSave = p.Id_Sub.Id;
+                }
+
+                // 3. הוספת הפרמטרים ל-cmd לפי הסדר המדויק בשאילתה
+                cmd.Parameters.Add(new OleDbParameter("@health_Declaration", healthToSave));
+                cmd.Parameters.Add(new OleDbParameter("@joining_Date", dateToSave));
+                cmd.Parameters.Add(new OleDbParameter("@id_Sub", subIdToSave));
+
+                // הפרמטר של ה-WHERE חייב להיות האחרון ברשימה!
                 cmd.Parameters.Add(new OleDbParameter("@id", p.Id));
             }
         }
@@ -72,9 +97,11 @@ namespace ViewModel
             Trainee t = entity as Trainee;
             if (t != null)
             {
-                // הפיכת הסדר: קודם מעדכנים את האבא Person (שם יושבת התמונה) ורק אז את הבן Trainee
-                updated.Add(new ChangeEntity(base.CreateUpdatedSQL, entity));
+                // הוספת הפעולה המעודכנת לרשימת השינויים
                 updated.Add(new ChangeEntity(this.CreateUpdatedSQL, entity));
+
+                // קריאה למחלקת הבסיס (למשל אם יש שדות בטבלת Person שצריך לעדכן)
+                updated.Add(new ChangeEntity(base.CreateUpdatedSQL, entity));
             }
         }
 

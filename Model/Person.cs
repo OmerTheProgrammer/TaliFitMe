@@ -15,9 +15,10 @@ namespace Model
         private string email="";
         private string num_id="";
         private string photo="";
+        private string? photoPath = null;
         private string pass="";
         private string user_name="";
-        private Gender id_gender=null;
+        private Gender id_gender = null;
 
         public string First_name { get => first_name; set => first_name = value; }
         public string Last_name { get => last_name; set => last_name = value; }
@@ -29,5 +30,6 @@ namespace Model
         public string Pass { get => pass; set => pass = value; }
         public string User_name { get => user_name; set => user_name = value; }
         public Gender Id_gender { get => id_gender; set => id_gender = value; }
+        public string? PhotoPath { get => photoPath; set => photoPath = value; }
     }
 }

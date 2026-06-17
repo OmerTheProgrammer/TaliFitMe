@@ -20,7 +20,12 @@ namespace Service
             client = new HttpClient();
             client.BaseAddress = new Uri(uri);
         }
-       
+
+        private static readonly System.Text.Json.JsonSerializerOptions JsonOptions =
+        new System.Text.Json.JsonSerializerOptions
+        {
+            DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.Never
+        };
 
         public async Task<string> GetPersonPhotoByte64(int id)
         {
@@ -62,7 +67,7 @@ namespace Service
         }
         public async Task<int> UpdateAPerson(Person person)
         {
-            return (await client.PutAsJsonAsync<Person>("api/Select/UpdateAPerson", person)).IsSuccessStatusCode ? 1 : 0;
+            return (await client.PutAsJsonAsync<Person>("api/Select/UpdateAPerson", person, JsonOptions)).IsSuccessStatusCode ? 1 : 0;
         }
 
 
@@ -80,7 +85,7 @@ namespace Service
         }
         public async Task<int> UpdateAManager(Manager manager)
         {
-            return (await client.PutAsJsonAsync<Manager>("api/Select/UpdateAManager", manager)).IsSuccessStatusCode ? 1 : 0;
+            return (await client.PutAsJsonAsync<Manager>("api/Select/UpdateAManager", manager, JsonOptions)).IsSuccessStatusCode ? 1 : 0;
         }
         public async Task<GenderList> GetAllGender()
         {
@@ -96,7 +101,7 @@ namespace Service
         }
         public async Task<int> UpdateAGender(Gender gender)
         {
-            return (await client.PutAsJsonAsync<Gender>("api/Select/UpdateAGender", gender)).IsSuccessStatusCode ? 1 : 0;
+            return (await client.PutAsJsonAsync<Gender>("api/Select/UpdateAGender", gender, JsonOptions)).IsSuccessStatusCode ? 1 : 0;
         }
 
 
@@ -114,7 +119,7 @@ namespace Service
         }
         public async Task<int> UpdateASubscription(Subscription subscription)
         {
-            return (await client.PutAsJsonAsync<Subscription>("api/Select/UpdateASubscription", subscription)).IsSuccessStatusCode ? 1 : 0;
+            return (await client.PutAsJsonAsync<Subscription>("api/Select/UpdateASubscription", subscription, JsonOptions)).IsSuccessStatusCode ? 1 : 0;
         }
 
 
@@ -132,7 +137,8 @@ namespace Service
         }
         public async Task<int> UpdateATrainer(Trainer trainer)
         {
-            return (await client.PutAsJsonAsync<Trainer>("api/Select/UpdateATrainer", trainer)).IsSuccessStatusCode ? 1 : 0;
+            var response = await client.PutAsJsonAsync<Trainer>("api/Select/UpdateATrainer", trainer, JsonOptions);
+            return response.IsSuccessStatusCode ? 1 : 0;
         }
 
 
@@ -151,7 +157,7 @@ namespace Service
         }
         public async Task<int> UpdateATrainee(Trainee trainee)
         {
-            return (await client.PutAsJsonAsync<Trainee>("api/Select/UpdateATrainee", trainee)).IsSuccessStatusCode ? 1 : 0;
+            return (await client.PutAsJsonAsync<Trainee>("api/Select/UpdateATrainee", trainee, JsonOptions)).IsSuccessStatusCode ? 1 : 0;
         }
 
 
@@ -169,7 +175,7 @@ namespace Service
         }
         public async Task<int> UpdateAKinds_of_workouts(Kinds_of_workouts kinds_of_workouts)
         {
-            return (await client.PutAsJsonAsync<Kinds_of_workouts>("api/Select/UpdateAKinds_of_workouts", kinds_of_workouts)).IsSuccessStatusCode ? 1 : 0;
+            return (await client.PutAsJsonAsync<Kinds_of_workouts>("api/Select/UpdateAKinds_of_workouts", kinds_of_workouts, JsonOptions)).IsSuccessStatusCode ? 1 : 0;
         }
 
 
@@ -188,7 +194,7 @@ namespace Service
         }
         public async Task<int> UpdateAList_of_Exc_workouts(List_of_Exc_workouts list_of_Exc_workouts)
         {
-            return (await client.PutAsJsonAsync<List_of_Exc_workouts>("api/Select/UpdateAList_of_Exc_workouts", list_of_Exc_workouts)).IsSuccessStatusCode ? 1 : 0;
+            return (await client.PutAsJsonAsync<List_of_Exc_workouts>("api/Select/UpdateAList_of_Exc_workouts", list_of_Exc_workouts, JsonOptions)).IsSuccessStatusCode ? 1 : 0;
         }
 
 
@@ -207,7 +213,7 @@ namespace Service
         }
         public async Task<int> UpdateATraining_registration(Training_registration training_registration)
         {
-            return (await client.PutAsJsonAsync<Training_registration>("api/Select/UpdateATraining_registration", training_registration)).IsSuccessStatusCode ? 1 : 0;
+            return (await client.PutAsJsonAsync<Training_registration>("api/Select/UpdateATraining_registration", training_registration, JsonOptions)).IsSuccessStatusCode ? 1 : 0;
         }
 
 
@@ -227,7 +233,7 @@ namespace Service
         }
         public async Task<int> UpdateAWorkouts_of_trainers(Workouts_of_trainers workouts_of_trainers)
         {
-            return (await client.PutAsJsonAsync<Workouts_of_trainers>("api/Select/UpdateAWorkouts_of_trainers", workouts_of_trainers)).IsSuccessStatusCode ? 1 : 0;
+            return (await client.PutAsJsonAsync<Workouts_of_trainers>("api/Select/UpdateAWorkouts_of_trainers", workouts_of_trainers, JsonOptions)).IsSuccessStatusCode ? 1 : 0;
         }
     }
 }

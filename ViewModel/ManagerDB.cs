@@ -12,9 +12,7 @@ namespace ViewModel
     {
         public ManagerList SelectAll()
         {
-            command.CommandText = $"SELECT Person.first_name, Person.last_name, Person.telephone, " +
-                $"Person.num_id, Person.born_date, Person.email, Person.id_gender, Person.pass, Person.user_name," +
-                $" Person.photo, Manager.id\r\nFROM (Manager INNER JOIN\r\n Person ON Manager.id = Person.id)";
+            command.CommandText = $"SELECT Person.* FROM (Manager INNER JOIN\r\n Person ON Manager.id = Person.id)";
             ManagerList groupList = new ManagerList(base.Select());
             return groupList;
         }

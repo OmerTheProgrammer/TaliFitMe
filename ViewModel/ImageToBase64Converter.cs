@@ -8,39 +8,23 @@ using System.Reflection;
 
 namespace ViewModel
 {
-     public class ImageToBase64Converter
+    public class ImageToBase64Converter
     {
-        public static string ImageFromResourceToBase64(string Photos)
+        public static string ImageToBase64(string imagePath)
         {
             try
             {
-                var assembly = typeof(ImageToBase64Converter).Assembly;
+                // Read the image file into a byte array
+                byte[] imageBytes = File.ReadAllBytes(imagePath);
 
-                string resourcePath = $"ViewModel.Photos.{Photos}";
+                // Convert the byte array to a base64 string
+                string base64String = Convert.ToBase64String(imageBytes);
 
-                using (Stream stream = assembly.GetManifestResourceStream(resourcePath))
-                {
-                    if (stream == null)
-                    {
-                        Console.WriteLine($"[שגיאה] ה-Resource לא נמצא בנתיב: {resourcePath}");
-                        Console.WriteLine("הנה הרשימה האמיתית של ה-Resources בתוך ViewModel:");
-                        foreach (string name in assembly.GetManifestResourceNames())
-                        {
-                            Console.WriteLine("-> " + name);
-                        }
-                        return "";
-                    }
-
-                    using (MemoryStream ms = new MemoryStream())
-                    {
-                        stream.CopyTo(ms);
-                        return Convert.ToBase64String(ms.ToArray());
-                    }
-                }
+                return base64String;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error: " + ex.Message);
+                Console.WriteLine("Error converting image to base64: " + ex.Message);
                 return null;
             }
         }

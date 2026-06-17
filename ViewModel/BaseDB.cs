@@ -14,6 +14,7 @@ using System.Threading.Tasks;
             $"\"C:\\Users\\mirit\\source\\repos\\titistunis2-stack\\TaliFitMe\\ViewModel\\talistu2506.accdb\"";
         
             protected static OleDbConnection connection;
+            protected static OleDbTransaction trans;
             protected OleDbCommand command;
             protected OleDbDataReader reader;
             public static string Path()
@@ -30,8 +31,8 @@ using System.Threading.Tasks;
                     s = s.Replace("/service:", "");
                 }
                 string[] st = s.Split('\\');
-                int x = st.Length - 6;
-                st[x] = "VViewModel";
+                int x = st.Length - 5;
+                st[x] = "ViewModel";
                 Array.Resize(ref st, x + 1);
                 string str = String.Join('\\', st);
                 return str;
@@ -50,6 +51,15 @@ using System.Threading.Tasks;
                 try
                 {
                     command.Connection = connection;
+                    if (trans != null)
+                    {
+                        command.Transaction = trans;
+                    }
+                    else
+                    {
+                        command.Transaction = null; // Clear old transaction references
+                    }
+
                     if (connection.State != ConnectionState.Open)
                     {
                         connection.Open();
@@ -66,7 +76,7 @@ using System.Threading.Tasks;
                 catch (Exception e)
                 {
 
-                    System.Diagnostics.Debug.WriteLine(
+                    throw new Exception(
                         e.Message + "\nSQL:" + command.CommandText);
                 }
                 finally
@@ -137,14 +147,14 @@ using System.Threading.Tasks;
         public virtual void Update(BaseEntity entity)
         {
             BaseEntity reqEntity = this.NewEntity();
-            if (entity != null &&entity.GetType() == reqEntity.GetType())
+            if (entity != null && reqEntity.GetType().IsAssignableFrom(entity.GetType()))
             {
                 updated.Add(new ChangeEntity(this.CreateUpdatedSQL, entity));
             }
         }
         public int SaveChanges()
         {
-            OleDbTransaction trans = null;
+            trans = null;
             int records_affected = 0;
 
             try
@@ -175,16 +185,15 @@ using System.Threading.Tasks;
                 foreach (var entity in deleted)
                 {
                     command.Parameters.Clear();
-                    entity.CreateSql(entity.Entity, command);
-
-                    records_affected += command.ExecuteNonQuery();
+                    entity.CreateSql(entity.Entity, command); records_affected += command.ExecuteNonQuery();
                 }
                 trans.Commit();
             }
             catch (Exception ex)
             {
                 trans.Rollback();
-                System.Diagnostics.Debug.WriteLine(ex.Message + "\n SQL:" + command.CommandText);
+                trans = null;
+                throw new Exception(ex.Message + "\n SQL:" + command.CommandText);
             }
             finally
             {

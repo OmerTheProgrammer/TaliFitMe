@@ -6,6 +6,10 @@
         "Path": "Fitali_API\\Fitali_API.csproj",
         "Action": "Start",
         "DebugTarget": "http"
+      },
+      {
+        "Path": "TestApi1\\TestApi1.csproj",
+        "Action": "Start"
       }
     ]
   }

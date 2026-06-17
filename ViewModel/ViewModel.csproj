@@ -24,4 +24,10 @@
     <Resource Include="Photos\girl2.jpg" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="talistu2506.accdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

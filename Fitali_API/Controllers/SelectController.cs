@@ -110,6 +110,7 @@ namespace Fitali_API.Controllers
             int x = db.SaveChanges();
             return x;
         }
+
         [HttpPut]
         [ActionName("UpdateAPerson")]
         public void UpdateAPerson([FromBody] Person person)
@@ -233,30 +234,14 @@ namespace Fitali_API.Controllers
         }
         [HttpPut]
         [ActionName("UpdateATrainee")]
-        public void UpdateATrainee([FromBody] Trainee trainee)
+        public int UpdateATrainee([FromBody] Trainee t)
         {
             TraineeDB db = new TraineeDB();
-            db.Update(trainee);
-            int x = db.SaveChanges();
+            db.Update(t); // קריאה לפונקציית העדכון
+            int x = db.SaveChanges(); // הרצת השאילתה מול ה-Access
+            return x;
         }
-        //[HttpPut]
-        //    [ActionName("UpdateATrainee")]
-        //    public int UpdateATrainee([FromBody] Trainee trainee)
-        //    {
-        //        try
-        //        {
-        //            TraineeDB db = new TraineeDB();
-        //            db.Update(trainee);
-        //            int x = db.SaveChanges();
 
-        //            return x; // מחזיר 1 אם שורה אחת עודכנה בהצלחה, או 0 אם נכשל
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            System.Diagnostics.Debug.WriteLine($"[Server Error]: {ex.Message}");
-        //            return 0; // במקרה של קריסה מחזירים 0
-        //        }
-        //    }
         [HttpGet]
         [ActionName("Training_registrationSelector")]
         public Training_registrationList SelectAllTraining_registration()
