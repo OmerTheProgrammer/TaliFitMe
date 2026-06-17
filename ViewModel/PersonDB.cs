@@ -165,12 +165,11 @@ namespace ViewModel
             p.Pass = reader["pass"].ToString();
             p.Id_gender = GenderDB.SelectById((int)reader["id_gender"]);
 
-            if (reader["photoPath"] == DBNull.Value)
+            if (reader["photo"] != DBNull.Value)//אם יש מידע של תמונה תשתמש בו
             {
                 p.Photo = reader["photo"]?.ToString() ?? "";
-                p.PhotoPath = null;
             }
-            else
+            else if (reader["photoPath"] != DBNull.Value)//אם אין מידע של תמונה אבל יש נתיב תעבור עליו
             {
                 p.PhotoPath = GetPath() + "\\Photos\\" + reader["photoPath"].ToString();
                 string fileName = p.PhotoPath;
@@ -178,13 +177,13 @@ namespace ViewModel
                 {
                     string base64Result = ImageToBase64Converter.ImageToBase64(fileName);
 
-                    if (!string.IsNullOrEmpty(base64Result))
+                    if (!string.IsNullOrEmpty(base64Result))// אם הקובץ נמצא תציג
                     {
                         p.Photo = base64Result;
                     }
                     else
                     {
-                        p.Photo = "Missing resource: " + fileName;
+                        throw new Exception("Missing resource: " + fileName);
                     }
                 }
             }
