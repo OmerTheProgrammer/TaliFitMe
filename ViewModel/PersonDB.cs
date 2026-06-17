@@ -172,7 +172,7 @@ namespace ViewModel
             }
             else
             {
-                p.PhotoPath = Path() + "\\Photos\\" + reader["photoPath"].ToString();
+                p.PhotoPath = GetPath() + "\\Photos\\" + reader["photoPath"].ToString();
                 string fileName = p.PhotoPath;
                 if (!string.IsNullOrEmpty(fileName))
                 {

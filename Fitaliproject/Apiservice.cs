@@ -10,7 +10,7 @@ using System.Text.Json;
 
 namespace Service
 {
-    public class Apiservice: IApiService
+    public class Apiservice : IApiService
     {
         string uri;
         public HttpClient client;
